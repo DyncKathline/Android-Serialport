@@ -1,11 +1,6 @@
 package com.ex.serialport;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -18,11 +13,19 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.ex.serialport.adapter.LogListAdapter;
 import com.ex.serialport.adapter.SpAdapter;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.List;
 
 import android_serialport_api.SerialPortFinder;
 import tp.xmaihh.serialport.SerialHelper;
@@ -74,13 +77,13 @@ public class MainActivity extends AppCompatActivity {
         spStopb = (Spinner) findViewById(R.id.sp_stopbits);
         spFlowcon = (Spinner) findViewById(R.id.sp_flowcon);
 
-        logListAdapter = new LogListAdapter(null);
+        logListAdapter = new LogListAdapter(new ArrayList<String>());
         recy.setLayoutManager(new LinearLayoutManager(this));
         recy.setAdapter(logListAdapter);
         recy.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
 
         serialPortFinder = new SerialPortFinder();
-        serialHelper = new SerialHelper("dev/ttyS1", 115200) {
+        serialHelper = new SerialHelper("dev/ttyUSB0", 9600) {
             @Override
             protected void onDataReceived(final ComBean comBean) {
                 runOnUiThread(new Runnable() {
@@ -257,6 +260,59 @@ public class MainActivity extends AppCompatActivity {
                     if (edInput.getText().toString().length() > 0) {
                         if (serialHelper.isOpen()) {
                             serialHelper.sendHex(edInput.getText().toString());
+                        } else {
+                            Toast.makeText(getBaseContext(), "串口没打开", Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        Toast.makeText(getBaseContext(), "先填数据吧", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        });
+
+        findViewById(R.id.btn_open1).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (radioGroup.getCheckedRadioButtonId() == R.id.radioButton1) {
+                    if (edInput.getText().toString().length() > 0) {
+                        if (serialHelper.isOpen()) {
+                            serialHelper.sendTxt("01050000FF008C3A");
+                        } else {
+                            Toast.makeText(getBaseContext(), "串口没打开", Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        Toast.makeText(getBaseContext(), "先填数据吧", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    if (edInput.getText().toString().length() > 0) {
+                        if (serialHelper.isOpen()) {
+                            serialHelper.sendHex("01050000FF008C3A");
+                        } else {
+                            Toast.makeText(getBaseContext(), "串口没打开", Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        Toast.makeText(getBaseContext(), "先填数据吧", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        });
+        findViewById(R.id.btn_close).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (radioGroup.getCheckedRadioButtonId() == R.id.radioButton1) {
+                    if (edInput.getText().toString().length() > 0) {
+                        if (serialHelper.isOpen()) {
+                            serialHelper.sendTxt("010500000000CDCA");
+                        } else {
+                            Toast.makeText(getBaseContext(), "串口没打开", Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        Toast.makeText(getBaseContext(), "先填数据吧", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    if (edInput.getText().toString().length() > 0) {
+                        if (serialHelper.isOpen()) {
+                            serialHelper.sendHex("010500000000CDCA");
                         } else {
                             Toast.makeText(getBaseContext(), "串口没打开", Toast.LENGTH_SHORT).show();
                         }

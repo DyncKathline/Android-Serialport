@@ -124,6 +124,8 @@ public class SerialPortFinder {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		devices.add("dev/ttyUSB0");
+		devices.add("dev/ttyCOM0");
 		return devices.toArray(new String[devices.size()]);
 	}
 }

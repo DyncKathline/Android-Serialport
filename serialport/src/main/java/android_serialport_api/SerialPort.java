@@ -174,11 +174,11 @@ public class SerialPort {
         /**
          * 硬件流控
          */
-        HARD(1),
+        RTS_CTS(1),
         /**
          * 软件流控
          */
-        SOFT(2);
+        XON_XOFF(2);
 
         int flowCon;
 
